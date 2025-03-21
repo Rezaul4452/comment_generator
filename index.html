@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Loan Settlement Comment Generator - Generate professional Bengali language settlement comments for loan cases">
+    <meta name="keywords" content="loan settlement, comment generator, Bengali, professional comments">
+    <meta name="author" content="Loan Settlement System">
+    <meta name="robots" content="index, follow">
+    <title>Hire A/C Approval/Recommend Comment Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:,">
+    <link rel="manifest" href="manifest.json">
+    <!-- Preload Firebase scripts for better performance -->
+    <link rel="preload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js" as="script">
+    <link rel="preload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js" as="script">
+</head>
+<body>
+    <div class="container">
+        <h1>Hire A/C Approval/Recommend Comment Generator</h1>
+        
+        <div class="input-section">
+            <h2>Manager's Comment</h2>
+            <textarea id="employeeComment" placeholder="Enter employee comment here..."></textarea>
+            <div class="button-group">
+                <button id="generateBtn" class="primary-btn">Generate Settlement Comment</button>
+            </div>
+        </div>
+
+        <div class="save-comment-section">
+            <h2>Save Reference Comment</h2>
+            <textarea id="referenceComment" placeholder="Enter a reference comment to save..."></textarea>
+            <div class="button-group">
+                <button id="saveCommentBtn" class="secondary-btn">Save Reference Comment</button>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2>Generated Comments</h2>
+            <div class="generated-comments">
+                <div class="comment-container">
+                    <div id="generatedComment1" class="comment-box"></div>
+                    <button id="copyBtn1" class="secondary-btn">Copy Comment 1</button>
+                </div>
+                <div class="comment-container">
+                    <div id="generatedComment2" class="comment-box"></div>
+                    <button id="copyBtn2" class="secondary-btn">Copy Comment 2</button>
+                </div>
+                <div class="comment-container">
+                    <div id="generatedComment3" class="comment-box"></div>
+                    <button id="copyBtn3" class="secondary-btn">Copy Comment 3</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="viewReferenceBtn" class="primary-btn">View Reference Comments</button>
+        </div>
+
+        <div class="saved-comments-section" style="display: none;">
+            <h2>Saved Reference Comments</h2>
+            <div id="savedComments" class="saved-comments-list"></div>
+            <div class="button-group">
+                <button id="hideReferenceBtn" class="secondary-btn">Hide Reference Comments</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js" defer></script>
+    <script src="app.js" defer></script>
+</body>
+</html>
