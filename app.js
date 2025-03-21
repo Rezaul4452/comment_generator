@@ -1,4 +1,9 @@
+// Cache configuration
+const cache = new Map();
+const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
+
 // Initialize Firebase with error handling and offline persistence
+let db = null;
 const firebaseConfig = {
     apiKey: "AIzaSyCYfcO-BhXJRL6a-K_C1tAOVJTTTnAud1E",
     authDomain: "movementregister.firebaseapp.com",
@@ -8,22 +13,32 @@ const firebaseConfig = {
     appId: "1:342109687892:web:8c528213a737e6a0ca5dc1"
 };
 
-try {
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    
-    // Enable offline persistence
-    db.enablePersistence()
-        .catch((err) => {
-            if (err.code == 'failed-precondition') {
-                console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
-            } else if (err.code == 'unimplemented') {
-                console.warn('The current browser doesn\'t support offline persistence');
-            }
-        });
-} catch (error) {
-    console.error('Error initializing Firebase:', error);
-}
+// Initialize Firebase when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        
+        // Enable offline persistence
+        await db.enablePersistence()
+            .catch((err) => {
+                if (err.code == 'failed-precondition') {
+                    console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+                } else if (err.code == 'unimplemented') {
+                    console.warn('The current browser\'s doesn\'t support offline persistence');
+                }
+            });
+
+        // Load saved comments after Firebase is initialized
+        await loadSavedComments();
+        // Ensure correct initial visibility
+        savedCommentsSection.style.display = 'none';
+        viewReferenceBtn.style.display = 'block';
+    } catch (error) {
+        console.error('Error initializing Firebase:', error);
+        db = null; // Ensure db is set to null if initialization fails
+    }
+});
 
 // Gemini API configuration
 const GEMINI_API_KEY = 'AIzaSyB9VsHhooGb_cptyyWC9PJO0-1xf1V6YYk';
@@ -109,11 +124,7 @@ async function generateSettlementComment(employeeComment) {
         
         contextPrompt += `Current Case:\n${employeeComment}\n\nGenerate settlement comments that follow similar patterns to previous responses while being specific to this case.`;
 
-        // Add caching for API responses
-const cache = new Map();
-const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
-
-const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -160,11 +171,11 @@ const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             return 'Unexpected API response. Please try again later.';
         } else {
             return 'Error generating comment. Please try again later.';
-        } finally {
-            // Reset button state
-            generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate Settlement Comment';
         }
+    } finally {
+        // Reset button state
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate Settlement Comment';
     }
 }
 
